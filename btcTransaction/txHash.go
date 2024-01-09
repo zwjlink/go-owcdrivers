@@ -90,6 +90,9 @@ func checkScriptType(scriptPubkey, redeemScript string) ([]byte, []byte, byte, e
 		}
 		return script, nil, TypeP2PKH, nil
 	} else if len(script) == 23 && script[0] == OpCodeHash160 && script[1] == 0x14 && script[22] == OpCodeEqual {
+		if redeemScript == "" {
+			return script, nil, TypeP2PKH, nil
+		}
 		redeem, err := hex.DecodeString(redeemScript)
 		if err != nil {
 			return nil, nil, 0, errors.New("Invalid redeemScript for a P2SH type input!")
